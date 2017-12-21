@@ -22,13 +22,11 @@ $("#Msub").on("click", function () {
   var Mconfirm = document.getElementById("Mconfirm");
   var content = Mconfirm.innerHTML;
   if (ck.value.toUpperCase() == content.toUpperCase() && ck.value.toUpperCase() != '') {
-    alert("验证码输入正确！");
     $('.msg').css({
       display: 'none'
     })
     Musername = $("#username").val();
     Mpassword = $("#password").val();
-    alert('------'+Musername+'------'+Mpassword);
     $.ajax({
       url: "/api/admins",
       type: "post",
@@ -50,7 +48,6 @@ $("#Msub").on("click", function () {
       }
     })
   } else {
-    //      alert("验证码为空或者输入不正确。。。");
     $('.msg').eq(2).css({
       display: 'inline-block'
     });
