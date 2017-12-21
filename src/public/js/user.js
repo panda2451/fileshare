@@ -34,18 +34,15 @@
 });
 //获取登录的用户名
 $(function () {
-    // let arr = [];
-    // arr = window.location.href.split('/')
-    // var i = arr.length;
-    // console.log(arr[i - 1]);
-    // var userid = arr[i - 1];
     $.ajax({
         url:'/api/users/',
         type:'get',
         success:function(data){
-            console.log("data");
-            console.log(data);
-            $('#user').html("<i class=\"fa fa-user-o\" aria-hidden=\"true\"></i>\n" + data[0].username);
+            if(data.length!==0){
+                $('#user').html("<i class=\"fa fa-user-o\" aria-hidden=\"true\"></i>\n" + data[0].username);
+            }else{
+                $('#user').html("<i class=\"fa fa-user-o\" aria-hidden=\"true\"></i>\n" + null);
+            }
         },
         error:function(err){
             alert('数据库查询失败');

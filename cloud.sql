@@ -48,6 +48,7 @@ DROP TABLE IF EXISTS `file`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `file` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user` int(11) NOT NULL,
   `filename` varchar(255) NOT NULL,
   `type` varchar(20) NOT NULL,
   `size` int(11) NOT NULL,

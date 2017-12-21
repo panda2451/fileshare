@@ -1,7 +1,7 @@
 import * as Express from 'express';
 import * as fs from 'fs';
-import * as moment from 'moment';
 import * as path from 'path';
+import * as util from 'util';
 import { promisify } from 'util';
 import cbFunc from '../cb/cb';
 import db from '../db/basic';
@@ -26,10 +26,17 @@ export class File {
     this.hash = hash;
   }
 
-  public async insert(type: string, size: number, userid: number) {
-    let con = await db('cloud');
-    let value =
+  public async insert(
+    user: number,
+    type: string,
+    size: number,
+    userid: number,
+  ) {
+    const con = await db('cloud');
+    const value =
       '(\'' +
+      user +
+      '\', \'' +
       this.filename +
       '\', \'' +
       type +
@@ -38,20 +45,11 @@ export class File {
       '\',\'' +
       this.hash +
       '\')';
-    let sql =
-      'insert into pending_file(filename, type, size, hash) values ' +
+    const sql =
+      'insert into pending_file(user,filename, type, size, hash) values ' +
       value +
       ';';
-    const result = await query(sql, con);
-    const date = new Date();
-    const dateTime = moment(date).format('YYYY-MM-DD HH:mm:ss');
-    con.end();
-    con = await db('cloud');
-    value = '(\'' + result.insertId + '\', \'' + userid + '\',\'' + dateTime + '\')';
-    sql =
-      'insert into user_file(file, user, uploaded_at) values ' + value + ';';
     await query(sql, con);
-    con.end();
   }
 
   public async upload(file: object, req: any, res: any) {
@@ -66,7 +64,12 @@ export class File {
     if (type === '') {
       type = 'other';
     }
-    await this.insert(type, file.size, req.session.userid || 0);
+    await this.insert(
+      req.session.userid || 0,
+      type,
+      file.size,
+      req.session.userid || 0,
+    );
     res.json('上传成功');
   }
   public async delete(id: any, req: any, res: any) {
@@ -109,7 +112,7 @@ export class File {
   public async getType(req: any, res: any, type: string) {
     const con = await db('cloud');
     const sql =
-      'select user.username,file.filename,file.size,file.downloads,user_file.user,user_file.file ' +
+      'select user.username,file.filename,file.size,file.downloads ' +
       'from file left join user_file on user_file.file = file.id ' +
       'left join user on user.id = user_file.user where file.type = \'' +
       type +

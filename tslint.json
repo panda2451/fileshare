@@ -6,7 +6,6 @@
     "indent": [true, "spaces", 2],
     "whitespace": [true, "check-branch", "check-operator", "check-typecast"],
     "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],
-    "import-name": false,
-    "no-console": false
+    "import-name": false
   }
 }

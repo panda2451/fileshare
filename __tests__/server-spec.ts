@@ -924,7 +924,7 @@ beforeAll(function(done) {
           expect(err).toBeFalsy();
           console.log('success user');
           con.query(
-            'create table pending_file (id int auto_increment,filename varchar(255) not null,type varchar(20) not null,size int not null,hash varchar(64) not null,primary key(id));',
+            'create table pending_file (id int auto_increment,user int not null,filename varchar(255) not null,type varchar(20) not null,size int not null,hash varchar(64) not null,primary key(id));',
             function(err) {
               expect(err).toBeFalsy();
               console.log('success pending_file');
